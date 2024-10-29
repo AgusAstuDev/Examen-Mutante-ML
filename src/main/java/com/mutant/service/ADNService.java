@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ADNService {
+public class ADNService implements ADNServiceInterface {
 
     @Autowired
     private ADNRepository adnRepository;
