@@ -1,6 +1,7 @@
 package com.mutant.controller;
 
 import com.mutant.model.ADNRequest;
+import com.mutant.model.Statistics;
 import com.mutant.service.ADNService;
 
 import com.mutant.model.ADN;
@@ -8,10 +9,7 @@ import com.mutant.model.ADN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -30,6 +28,12 @@ public class MutantController {
                 .map(isMutant -> isMutant
                         ? ResponseEntity.status(HttpStatus.OK).body("Es Mutante")
                         : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Es Humano"));
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Statistics> getStats() {
+        Statistics stats = adnService.getStatistics();
+        return ResponseEntity.ok(stats);
     }
 
 }

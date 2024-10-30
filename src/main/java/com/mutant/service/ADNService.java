@@ -1,11 +1,13 @@
 package com.mutant.service;
 
 import com.mutant.model.ADN;
+import com.mutant.model.Statistics;
 import com.mutant.repository.ADNRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +27,28 @@ public class ADNService implements ADNServiceInterface {
         return adnRepository.findById(id);
     }
 
-    public Mono<Boolean> isMutant(String[] adn) {
-        List<String> secuencia = List.of(adn); // Convertir el String[] a List<String>
-        return Mono.just(hasMutantSequence(secuencia));
+    @Transactional
+    public Mono<Boolean> isMutant(String[] adnArray) {
+        // Convierte el array de ADN a una lista de cadenas
+        List<String> secuencia = List.of(adnArray);
+
+        // Verifica si tiene una secuencia mutante
+        boolean isMutant = hasMutantSequence(secuencia);
+
+        // Convertimos el array de ADN en un String para almacenar en la base de datos
+        String adnString = String.join(",", adnArray);
+
+        // Verificamos si el ADN ya está en la base de datos
+        Optional<ADN> existingAdn = adnRepository.findByDnaSequence(adnString);
+        if (existingAdn.isEmpty()) {
+            // Si no existe, lo guardamos
+            ADN adn = new ADN();
+            adn.setDnaSequence(adnString);
+            adn.setIsMutant(isMutant);
+            adnRepository.save(adn);
+        }
+
+        return Mono.just(isMutant);
     }
 
     private boolean hasMutantSequence(List<String> adn) {
@@ -86,6 +107,19 @@ public class ADNService implements ADNServiceInterface {
         }
 
         return false; // No se encontraron secuencias mutantes
+    }
+
+    public Statistics getStatistics() {
+        long countMutantDna = adnRepository.countByIsMutant(true); // Contar ADN mutante
+        long countHumanDna = adnRepository.countByIsMutant(false); // Contar ADN humano
+
+        double ratio = countHumanDna > 0 ? (double) countMutantDna / countHumanDna : 0;
+
+        Statistics stats = new Statistics();
+        stats.setCountMutantDna(countMutantDna);
+        stats.setCountHumanDna(countHumanDna);
+        stats.setRatio(ratio);
+        return stats;
     }
 
 }

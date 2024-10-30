@@ -19,6 +19,9 @@ public class ADN implements Serializable {
     @Column(name = "fila", columnDefinition = "TEXT")
     private List<String> adn;
 
-    private boolean isMutant;
-    private Long countedMutations;
+    @Column(name = "is_mutant")
+    private Boolean isMutant;
+
+    @Column(name = "dna_sequence", unique = true)
+    private String dnaSequence;
 }
