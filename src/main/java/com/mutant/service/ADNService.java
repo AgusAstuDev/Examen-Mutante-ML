@@ -4,6 +4,7 @@ import com.mutant.model.ADN;
 import com.mutant.repository.ADNRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,43 +25,67 @@ public class ADNService implements ADNServiceInterface {
         return adnRepository.findById(id);
     }
 
-
-    public boolean isMutant(ADN adn) {
-        List<String> secuencia = adn.getAdn();
-        return hasMutantSequence(secuencia);
+    public Mono<Boolean> isMutant(String[] adn) {
+        List<String> secuencia = List.of(adn); // Convertir el String[] a List<String>
+        return Mono.just(hasMutantSequence(secuencia));
     }
 
     private boolean hasMutantSequence(List<String> adn) {
-        int consecutiveCount;
+        int n = adn.size();
+        int requiredSequenceLength = 4;
 
-        // Horizontal
-        for (String row : adn) {
-            consecutiveCount = 1;
-            for (int i = 1; i < row.length(); i++) {
-                if (row.charAt(i) == row.charAt(i - 1)) {
-                    consecutiveCount++;
-                    if (consecutiveCount >= 4) return true; // Se encontró una secuencia de 4 iguales
+        // Horizontal y Vertical
+        for (int i = 0; i < n; i++) {
+            int horizontalCount = 1;
+            int verticalCount = 1;
+
+            for (int j = 1; j < n; j++) {
+                // Horizontal
+                if (adn.get(i).charAt(j) == adn.get(i).charAt(j - 1)) {
+                    horizontalCount++;
+                    if (horizontalCount >= requiredSequenceLength) return true;
                 } else {
-                    consecutiveCount = 1; // Reinicia el conteo
+                    horizontalCount = 1;
                 }
-            }
-        }
 
-        // Vertical
-        for (int i = 0; i < adn.get(0).length(); i++) { // Cambiado para usar List
-            consecutiveCount = 1;
-            for (int j = 1; j < adn.size(); j++) { // Cambiado para usar List
+                // Vertical
                 if (adn.get(j).charAt(i) == adn.get(j - 1).charAt(i)) {
-                    consecutiveCount++;
-                    if (consecutiveCount >= 4) return true; // Se encontró una secuencia de 4 iguales
+                    verticalCount++;
+                    if (verticalCount >= requiredSequenceLength) return true;
                 } else {
-                    consecutiveCount = 1; // Reinicia el conteo
+                    verticalCount = 1;
                 }
             }
         }
 
-        // Puedes agregar lógica para verificar oblicuamente si lo deseas
+        // Diagonales (Oblicua y Contra-oblicua)
+        for (int i = 0; i <= n - requiredSequenceLength; i++) {
+            for (int j = 0; j <= n - requiredSequenceLength; j++) {
+                // Oblicua (diagonal de izquierda a derecha)
+                int diagonalCount = 1;
+                for (int k = 1; k < requiredSequenceLength; k++) {
+                    if (adn.get(i + k).charAt(j + k) == adn.get(i + k - 1).charAt(j + k - 1)) {
+                        diagonalCount++;
+                        if (diagonalCount >= requiredSequenceLength) return true;
+                    } else {
+                        break;
+                    }
+                }
+
+                // Contra-oblicua (diagonal de derecha a izquierda)
+                int antiDiagonalCount = 1;
+                for (int k = 1; k < requiredSequenceLength; k++) {
+                    if (adn.get(i + k).charAt(j + requiredSequenceLength - k - 1) == adn.get(i + k - 1).charAt(j + requiredSequenceLength - k)) {
+                        antiDiagonalCount++;
+                        if (antiDiagonalCount >= requiredSequenceLength) return true;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
 
         return false; // No se encontraron secuencias mutantes
     }
+
 }

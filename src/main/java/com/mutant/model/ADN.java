@@ -10,14 +10,15 @@ import java.util.List;
 @Entity
 @Table(name = "adn")
 public class ADN implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ElementCollection // Para manejar la colección de cadenas
-    @Column(name = "fila", columnDefinition = "TEXT") // nombre de la columna
-    private List<String> adn; // Ahora almacena una lista de cadenas
+    @ElementCollection
+    @Column(name = "fila", columnDefinition = "TEXT")
+    private List<String> adn;
 
-    private int isMutant;
-    private Long accumulate;
+    private boolean isMutant;
+    private Long countedMutations;
 }
