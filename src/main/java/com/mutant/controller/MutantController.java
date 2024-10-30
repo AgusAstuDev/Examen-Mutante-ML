@@ -4,8 +4,6 @@ import com.mutant.model.ADNRequest;
 import com.mutant.model.Statistics;
 import com.mutant.service.ADNService;
 
-import com.mutant.model.ADN;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +25,7 @@ public class MutantController {
         return adnService.isMutant(request.getAdn())
                 .map(isMutant -> isMutant
                         ? ResponseEntity.status(HttpStatus.OK).body("Es Mutante")
-                        : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Es Humano"));
+                        : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No es mutante"));
     }
 
     @GetMapping("/stats")

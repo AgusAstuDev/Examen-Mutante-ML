@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface ADNRepository extends JpaRepository<ADN, Long> {
-    Optional<ADN> findByDnaSequence(String dnaSequence);
+    Optional<ADN> findByAdnSequence(String dnaSequence);
 
     long countByIsMutant(boolean isMutant);
 }

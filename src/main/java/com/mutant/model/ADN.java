@@ -23,5 +23,5 @@ public class ADN implements Serializable {
     private Boolean isMutant;
 
     @Column(name = "dna_sequence", unique = true)
-    private String dnaSequence;
+    private String adnSequence;
 }

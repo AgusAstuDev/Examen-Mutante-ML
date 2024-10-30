@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Statistics {
-    private long countMutantDna;
-    private long countHumanDna;
+    private long countMutantAdn;
+    private long countHumanAdn;
     private double ratio;
 }

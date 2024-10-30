@@ -17,33 +17,26 @@ public class ADNService implements ADNServiceInterface {
     @Autowired
     private ADNRepository adnRepository;
 
-    // Método para guardar un ADN en la base de datos
     public ADN saveADN(ADN adn) {
         return adnRepository.save(adn);
     }
 
-    // Método para encontrar un ADN por su id
     public Optional<ADN> getADNById(Long id) {
         return adnRepository.findById(id);
     }
 
     @Transactional
     public Mono<Boolean> isMutant(String[] adnArray) {
-        // Convierte el array de ADN a una lista de cadenas
         List<String> secuencia = List.of(adnArray);
-
-        // Verifica si tiene una secuencia mutante
         boolean isMutant = hasMutantSequence(secuencia);
 
         // Convertimos el array de ADN en un String para almacenar en la base de datos
         String adnString = String.join(",", adnArray);
+        Optional<ADN> existingAdn = adnRepository.findByAdnSequence(adnString);
 
-        // Verificamos si el ADN ya está en la base de datos
-        Optional<ADN> existingAdn = adnRepository.findByDnaSequence(adnString);
         if (existingAdn.isEmpty()) {
-            // Si no existe, lo guardamos
             ADN adn = new ADN();
-            adn.setDnaSequence(adnString);
+            adn.setAdnSequence(adnString);
             adn.setIsMutant(isMutant);
             adnRepository.save(adn);
         }
@@ -106,18 +99,18 @@ public class ADNService implements ADNServiceInterface {
             }
         }
 
-        return false; // No se encontraron secuencias mutantes
+        return false;
     }
 
     public Statistics getStatistics() {
-        long countMutantDna = adnRepository.countByIsMutant(true); // Contar ADN mutante
-        long countHumanDna = adnRepository.countByIsMutant(false); // Contar ADN humano
+        long countMutantAdn = adnRepository.countByIsMutant(true);
+        long countHumanAdn = adnRepository.countByIsMutant(false);
 
-        double ratio = countHumanDna > 0 ? (double) countMutantDna / countHumanDna : 0;
+        double ratio = countHumanAdn > 0 ? (double) countMutantAdn / countHumanAdn : 0;
 
         Statistics stats = new Statistics();
-        stats.setCountMutantDna(countMutantDna);
-        stats.setCountHumanDna(countHumanDna);
+        stats.setCountMutantAdn(countMutantAdn);
+        stats.setCountHumanAdn(countHumanAdn);
         stats.setRatio(ratio);
         return stats;
     }
