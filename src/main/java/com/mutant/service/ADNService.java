@@ -14,6 +14,8 @@ import java.util.Optional;
 @Service
 public class ADNService implements ADNServiceInterface {
 
+    private static final int REQUIRED_SEQUENCE_LENGTH = 4;
+
     @Autowired
     private ADNRepository adnRepository;
 
@@ -30,75 +32,78 @@ public class ADNService implements ADNServiceInterface {
         List<String> secuencia = List.of(adnArray);
         boolean isMutant = hasMutantSequence(secuencia);
 
-        // Convertimos el array de ADN en un String para almacenar en la base de datos
-        String adnString = String.join(",", adnArray);
-        Optional<ADN> existingAdn = adnRepository.findByAdnSequence(adnString);
+        saveADNIfNotExists(adnArray, isMutant);
 
-        if (existingAdn.isEmpty()) {
+        return Mono.just(isMutant);
+    }
+    // Funcion que guarda en la DB si ese ADN no existe anteriormente
+    private void saveADNIfNotExists(String[] adnArray, boolean isMutant) {
+        String adnString = String.join(",", adnArray);
+        if (adnRepository.findByAdnSequence(adnString).isEmpty()) {
             ADN adn = new ADN();
             adn.setAdnSequence(adnString);
             adn.setIsMutant(isMutant);
             adnRepository.save(adn);
         }
-
-        return Mono.just(isMutant);
+    }
+    // Funcion que verifica si es mutante
+    private boolean hasMutantSequence(List<String> adn) {
+        return checkHorizontalAndVertical(adn) || checkDiagonals(adn);
+    }
+    // Funcion que checkea si hay coincidencias de letras horizontales o verticales
+    private boolean checkHorizontalAndVertical(List<String> adn) {
+        int n = adn.size();
+        for (int i = 0; i < n; i++) {
+            if (checkSequence(adn.get(i), REQUIRED_SEQUENCE_LENGTH)) return true;
+            StringBuilder verticalSequence = new StringBuilder();
+            for (int j = 0; j < n; j++) {
+                verticalSequence.append(adn.get(j).charAt(i));
+            }
+            if (checkSequence(verticalSequence.toString(), REQUIRED_SEQUENCE_LENGTH)) return true;
+        }
+        return false;
+    }
+    // Funcion que checkea si hay coincidencias de letras diagonales o contra-diagonales
+    private boolean checkDiagonals(List<String> adn) {
+        int n = adn.size();
+        for (int i = 0; i <= n - REQUIRED_SEQUENCE_LENGTH; i++) {
+            for (int j = 0; j <= n - REQUIRED_SEQUENCE_LENGTH; j++) {
+                if (checkDiagonal(adn, i, j, true) || checkDiagonal(adn, i, j, false)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
-    private boolean hasMutantSequence(List<String> adn) {
-        int n = adn.size();
-        int requiredSequenceLength = 4;
-
-        // Horizontal y Vertical
-        for (int i = 0; i < n; i++) {
-            int horizontalCount = 1;
-            int verticalCount = 1;
-
-            for (int j = 1; j < n; j++) {
-                // Horizontal
-                if (adn.get(i).charAt(j) == adn.get(i).charAt(j - 1)) {
-                    horizontalCount++;
-                    if (horizontalCount >= requiredSequenceLength) return true;
-                } else {
-                    horizontalCount = 1;
-                }
-
-                // Vertical
-                if (adn.get(j).charAt(i) == adn.get(j - 1).charAt(i)) {
-                    verticalCount++;
-                    if (verticalCount >= requiredSequenceLength) return true;
-                } else {
-                    verticalCount = 1;
-                }
+    private boolean checkDiagonal(List<String> adn, int startRow, int startCol, boolean leftToRight) {
+        int count = 1;
+        for (int k = 1; k < REQUIRED_SEQUENCE_LENGTH; k++) {
+            int row = startRow + k;
+            int col = leftToRight ? startCol + k : startCol + REQUIRED_SEQUENCE_LENGTH - k - 1;
+            if (adn.get(row).charAt(col) == adn.get(startRow).charAt(startCol)) {
+                count++;
+                if (count >= REQUIRED_SEQUENCE_LENGTH) return true;
+            } else {
+                break;
             }
         }
+        return false;
+    }
 
-        // Diagonales (Oblicua y Contra-oblicua)
-        for (int i = 0; i <= n - requiredSequenceLength; i++) {
-            for (int j = 0; j <= n - requiredSequenceLength; j++) {
-                // Oblicua (diagonal de izquierda a derecha)
-                int diagonalCount = 1;
-                for (int k = 1; k < requiredSequenceLength; k++) {
-                    if (adn.get(i + k).charAt(j + k) == adn.get(i + k - 1).charAt(j + k - 1)) {
-                        diagonalCount++;
-                        if (diagonalCount >= requiredSequenceLength) return true;
-                    } else {
-                        break;
-                    }
-                }
+    private boolean checkSequence(String sequence, int requiredLength) {
+        int count = 1;
 
-                // Contra-oblicua (diagonal de derecha a izquierda)
-                int antiDiagonalCount = 1;
-                for (int k = 1; k < requiredSequenceLength; k++) {
-                    if (adn.get(i + k).charAt(j + requiredSequenceLength - k - 1) == adn.get(i + k - 1).charAt(j + requiredSequenceLength - k)) {
-                        antiDiagonalCount++;
-                        if (antiDiagonalCount >= requiredSequenceLength) return true;
-                    } else {
-                        break;
-                    }
+        for (int i = 1; i < sequence.length(); i++) {
+            if (sequence.charAt(i) == sequence.charAt(i - 1)) {
+                count++;
+                if (count >= requiredLength) {
+                    return true;
                 }
+            } else {
+                count = 1;
             }
         }
-
         return false;
     }
 
