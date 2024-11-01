@@ -29,7 +29,12 @@ public class ADNService implements ADNServiceInterface {
 
     @Transactional
     public Mono<Boolean> isMutant(String[] adnArray) {
+        if (adnArray == null || adnArray.length == 0) {
+            return Mono.just(false); // O lanzar una excepción
+        }
+
         List<String> secuencia = List.of(adnArray);
+
         boolean isMutant = hasMutantSequence(secuencia);
 
         saveADNIfNotExists(adnArray, isMutant);
@@ -76,7 +81,7 @@ public class ADNService implements ADNServiceInterface {
         return false;
     }
 
-    private boolean checkDiagonal(List<String> adn, int startRow, int startCol, boolean leftToRight) {
+        private boolean checkDiagonal(List<String> adn, int startRow, int startCol, boolean leftToRight) {
         int count = 1;
         for (int k = 1; k < REQUIRED_SEQUENCE_LENGTH; k++) {
             int row = startRow + k;
@@ -93,7 +98,6 @@ public class ADNService implements ADNServiceInterface {
 
     private boolean checkSequence(String sequence, int requiredLength) {
         int count = 1;
-
         for (int i = 1; i < sequence.length(); i++) {
             if (sequence.charAt(i) == sequence.charAt(i - 1)) {
                 count++;
