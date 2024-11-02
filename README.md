@@ -1,6 +1,5 @@
 # **Primer parcial backend - Individual**
 
----
 ## 🧬 Introducción del reto
 
 ###   Alcance:
@@ -100,21 +99,7 @@ Se utilizó H2 como base de datos para almacenar todas las secuencias de adn, si
 
 #### Funcionamiento POST en Render
 
-
 ## 🔨 Pruebas de rendimiento JMeter
-Se realizaron pruebas de rendimiento de manera local Tanto POST como GET, se probó desde 100
-usuarios por segundo hasta 5000, respondiendo correctamente la aplicación hasta 2099 sin presentar error en la petición.
-Cabe destacar que elegí un Ramp-up period de 1 segundo, lo que significa que en tan solo un segundo se recibieron las 2099 peticiones.
-En las imagenes que se muestran a continuación se utilizo JMeter (5.6.3)
-
-![jmeterGetT.png](imagenes%2FjmeterGetT.png)
-![jmeterGetT2.png](imagenes%2FjmeterGetT2.png)
-![jmeterPostT.png](imagenes%2FjmeterPostT.png)
-
-Para más información sobre el reto, la implementación del resto de tecnologias y temas como la eficiencia
-y la complejidad cuadrática del algoritmo visitar mi pagina:
-
-<a href="https://thebestdeveloper95.github.io/Documentacion-HTML-Examen-Mercadolibre/" target="_blank">Como afronté el Examen de Mercadolibre</a>
 
 ## 🧬 Live test (Render)
 
