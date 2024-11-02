@@ -49,6 +49,10 @@ spring.datasource.username=sa
 spring.datasource.password=
 </code></pre>
 
+## 🖥️ Diagrama Arquitectura de capas para este proyecto
+
+![Arquitectura.png](images%2FArquitectura.png)
+
 ## 🖥️ Diagrama de secuencias
 
 Imagen secuencia
@@ -57,13 +61,13 @@ Imagen secuencia
 
 Las pruebas unitarias realizadas con jUnit se han hecho superando el 80% de cobertura. IntelliJ ofrece la posibilidad de poder ver la misma ejecutanto test con cobertura.
 
-Imagen cobertura sin main
+![Cobertura.png](images%2FCobertura.png)
 
 Problemas encontrados: IntelliJ IDEA ofrece una herramienta para poder ejecutar los test y ver la cobertura, pero no me ha permitido realizarlo con distintos paquetes y clases test diferenciadas, por lo que se ha hecho el test en una sola clase lo cual no es recomendado.
 
 Aqui se muestra el test sin hacer el de Main, al hacer este toma todos los demás resultados al 100%.
 
-Imagen cobertura con main
+![Cobertura_main.png](images%2FCobertura_main.png)
 
 ## 🧪 Pruebas utilizando Postman como cliente
 
@@ -112,13 +116,25 @@ Se utilizó H2 como base de datos para almacenar todas las secuencias de adn, si
 
 #### Aquí se muestran las pruebas de rendimiento con jMeter en local para el GET:
 
-Imagenes Jmeter GET
+![JMeter_config_get.png](images%2FJMeter_config_get.png)
+
+![JMeter_config_get2.png](images%2FJMeter_config_get2.png)
+
+![JMeter_config_get3.png](images%2FJMeter_config_get3.png)
+
+![JMeter_config_get4.png](images%2FJMeter_config_get4.png)
 
 - Cabe destacar que con un Ramp-up period de 1 segundo, en tan solo un segundo se hicieron 3000 peticiones
 
 #### Aquí se muestran las pruebas de rendimiento con jMeter en local para el POST:
 
-Imagenes Jmeter POST
+![JMeter_config_post.png](images%2FJMeter_config_post.png)
+
+![JMeter_config_post2.png](images%2FJMeter_config_post2.png)
+
+![JMeter_config_post3.png](images%2FJMeter_config_post3.png)
+
+![JMeter_config_post4.png](images%2FJMeter_config_post4.png)
 
 - Cabe destacar que con un Ramp-up period de 1 segundo, en tan solo un segundo se hicieron 2000 peticiones
 
