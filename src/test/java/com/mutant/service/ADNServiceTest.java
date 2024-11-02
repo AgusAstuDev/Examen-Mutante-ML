@@ -1,5 +1,6 @@
 package com.mutant.service;
 
+import com.mutant.MutantApp;
 import com.mutant.controller.MutantController;
 import com.mutant.model.ADN;
 import com.mutant.model.ADNRequest;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
 
@@ -96,10 +98,10 @@ public class ADNServiceTest {
         assertArrayEquals(adn, adnRequest.getAdn());
     }
 
-//    @Test
-//    public void testMutantAppMainMethod() {
-//        // Verificamos que el método main de MutantApp se ejecuta sin lanzar excepciones
-//        assertDoesNotThrow(() -> MutantApp.main(new String[]{}));
-//    }
+    @Test
+    public void testMutantAppMainMethod() {
+        // Verificamos que el método main de MutantApp se ejecuta sin lanzar excepciones
+        assertDoesNotThrow(() -> MutantApp.main(new String[]{}));
+    }
     
 }
