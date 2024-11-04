@@ -59,6 +59,10 @@ El diagrama de secuencia simplificado para el POST en <code>/mutant</code> es el
 
 ![post_mutant_secuencia.png](images%2Fpost_mutant_secuencia.png)
 
+El diagrama de secuencia simplificado para el GET en <code>/stats</code> es el siguiente:
+
+![get_mutant_secuencia.png](images%2Fget_mutant_secuencia.png)
+
 ## 📊 Cobertura de Código (>80%)
 
 Las pruebas unitarias realizadas con jUnit se han hecho superando el 80% de cobertura. IntelliJ ofrece la posibilidad de poder ver la misma ejecutanto test con cobertura.
