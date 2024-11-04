@@ -55,7 +55,9 @@ spring.datasource.password=
 
 ## 🖥️ Diagrama de secuencias
 
-Imagen secuencia
+El diagrama de secuencia simplificado para el POST en <code>/mutant</code> es el siguiente:
+
+![post_mutant_secuencia.png](images%2Fpost_mutant_secuencia.png)
 
 ## 📊 Cobertura de Código (>80%)
 
