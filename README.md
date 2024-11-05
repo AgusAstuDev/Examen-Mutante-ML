@@ -113,6 +113,15 @@ Se utilizó H2 como base de datos para almacenar todas las secuencias de adn, si
 ## 🗄️ Prueba de documentación con Swagger
 #### Funcionamiento POST o GET en Swagger
 
+Tenemos definidos ambos endpoints:
+![swagger1.png](images%2Fswagger1.png)
+
+En el POST tenemos una estructura de un mutante prearmada para probar la respuesta:
+![swagger2.png](images%2Fswagger2.png)
+![swagger3.png](images%2Fswagger3.png)
+
+En el get damos clic en Execute para obtener los ADN's de la DB:
+![swagger4.png](images%2Fswagger4.png)
 
 ## 🧪 Ejemplos de funcionamiento (Render + Postman)
 
