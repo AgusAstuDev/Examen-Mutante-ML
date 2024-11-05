@@ -146,10 +146,9 @@ Se utilizó H2 como base de datos para almacenar todas las secuencias de adn, si
 
 ## 🧬 Live test (Render)
 
-- **Swagger:** 
-- **H2:**  
-- **Mutant check url (POST):**  
-- **Stats url (GET):**  
+- **Swagger:** https://examen-mutante-ml.onrender.com/swagger-ui/index.html
+- **Mutant check url (POST):** https://examen-mutante-ml.onrender.com/mutant
+- **Stats url (GET):**  https://examen-mutante-ml.onrender.com/stats
 
 ## 🏆 Desafíos cumplidos:
 ### Nivel 1: ✓
